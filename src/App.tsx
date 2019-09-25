@@ -1,26 +1,82 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { booksWithImages } from './images/imagesLoader';
+import BookList from './components/book-list';
+import CreateBook from './components/create-book'
+import Header from './components/header/index'
+import React from 'react';
+import Search from './/components/search'
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ReactDOM from 'react-dom';
+
+//const newStyle = { opacity: 0.2, background: "#B4BFCD", width: "25%" ,display: "inline-block", margin: "3%"}     
+
+class App extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props)
+
+    this.state = { 
+      lang: "All",
+      style : {background: "#B4BFCD", width: "25%" ,display: "inline-block", margin: "3%"},
+      searchValue: "",
+      inHebrew: false,
+      filteredBookList: booksWithImages, 
+      fullBookList: booksWithImages,
+       }
+  }
+
+  searchOperation = (searchText: string, inHebrew: boolean, lang: string): void => {
+
+    const {fullBookList} = this.state;
+
+
+    const filteredData = fullBookList.filter((book: any) => { 
+    const isInHebrew = inHebrew ? book.language.toLowerCase() === "hebrew" : true
+    const isLang = lang !== "All" ? book.language === lang : true 
+
+    return book.title.toLowerCase().includes(searchText) && isInHebrew && isLang
+   })
+    
+    this.setState({lang, filteredBookList: filteredData, searchValue: searchText, inHebrew })
+
+  }
+
+  render() {
+    const {style, filteredBookList, searchValue, inHebrew, fullBookList } = this.state
+    const searchProps = {lang: this.state.lang, languages: getLanguages(fullBookList), searchOperation: this.searchOperation, inHebrew, searchValue}
+    
+    
+    
+    return (
+      <div className="App">
+        <Header style={{ color: "#B4BFCD", background: "#160C59", padding: "40px" }} title="Books App" />
+
+        <Header title="Search" />
+        <CreateBook addBookToList={(book: any)=>{
+        const newData = [...fullBookList, { ...book, inHebrew: true }];
+        this.setState({ filteredBookList: newData, fullBookList: newData })
+          
+        }}/>
+         
+        <Search {...searchProps}/>
+
+       
+      
+        <BookList books={filteredBookList} style={style} />
+
+      </div>
+    )
+  }
+
 }
+
+
+function getLanguages(books: Array<any>) {
+  return Object.keys(books.reduce((allCats, book: any) => {
+    return { ...allCats, [book.language]: true }
+  }, { "All": true }))
+}
+
 
 export default App;
