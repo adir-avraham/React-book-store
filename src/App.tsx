@@ -1,6 +1,7 @@
 import './App.css';
 import { booksWithImages } from './images/imagesLoader';
 import BookList from './components/book-list';
+import Cart from './/components/cart'
 import CreateBook from './components/create-book'
 import Header from './components/header/index'
 import React from 'react';
@@ -23,7 +24,8 @@ class App extends React.Component<any, any> {
       inHebrew: false,
       filteredBookList: booksWithImages, 
       fullBookList: booksWithImages,
-       }
+      cart: [],
+      }
   }
 
   searchOperation = (searchText: string, inHebrew: boolean, lang: string): void => {
@@ -41,16 +43,19 @@ class App extends React.Component<any, any> {
     this.setState({lang, filteredBookList: filteredData, searchValue: searchText, inHebrew })
 
   }
+  addToCart = (book: any) => {
+    this.setState({cart: [...this.state.cart, book]})
+  }
 
   render() {
-    const {style, filteredBookList, searchValue, inHebrew, fullBookList } = this.state
+    const {style, filteredBookList, searchValue, inHebrew, fullBookList, cart } = this.state
     const searchProps = {lang: this.state.lang, languages: getLanguages(fullBookList), searchOperation: this.searchOperation, inHebrew, searchValue}
     
     
     
     return (
       <div className="App">
-        <Header style={{ color: "#B4BFCD", background: "#160C59", padding: "40px" }} title="Books App" />
+        <Header style={{ color: "#B4BFCD", background: "#5142B1", padding: "40px" }} title="Books Store"/>
 
         <Header title="Search" />
         <CreateBook addBookToList={(book: any)=>{
@@ -61,9 +66,12 @@ class App extends React.Component<any, any> {
          
         <Search {...searchProps}/>
 
-       
-      
-        <BookList books={filteredBookList} style={style} />
+        <Header style={{ color: "#B4BFCD", background: "#0AA12C", padding: "15px" }} title="Cart"/>
+        <Cart books={cart} style={style}/>
+ 
+        
+        <Header style={{ color: "#B4BFCD", background: "#88768C", padding: "15px" }} title="Our Books"/>
+        <BookList addToCart={this.addToCart} books={filteredBookList} style={style} />
 
       </div>
     )
