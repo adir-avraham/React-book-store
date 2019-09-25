@@ -4,6 +4,7 @@ import BookList from './components/book-list';
 import Cart from './/components/cart'
 import CreateBook from './components/create-book'
 import Header from './components/header/index'
+import Payment from './components/payment'
 import React from 'react';
 import Search from './/components/search'
 
@@ -55,22 +56,25 @@ class App extends React.Component<any, any> {
     
     return (
       <div className="App">
-        <Header style={{ color: "#B4BFCD", background: "#5142B1", padding: "40px" }} title="Books Store"/>
+        <Header style={{ color: "white", background: "#5142B1", padding: "40px" }} title="BOOKS STORE"/>
 
-        <Header title="Search" />
+        <Header style={{ color: "white", background: "#FC6336"}} title="search"/> 
+        <Search {...searchProps}/>
+        
+        <Header style={{ color: "white", background: "#6392F9"}} title="create a book"/>      
         <CreateBook addBookToList={(book: any)=>{
         const newData = [...fullBookList, { ...book, inHebrew: true }];
         this.setState({ filteredBookList: newData, fullBookList: newData })
-          
         }}/>
          
-        <Search {...searchProps}/>
 
-        <Header style={{ color: "#B4BFCD", background: "#0AA12C", padding: "15px" }} title="Cart"/>
+        <Header style={{ color: "white", background: "#0AA12C"}} title="cart"/>
         <Cart books={cart} style={style}/>
  
+        <Header style={{ color: "white", background: "#FC9902"}} title="payment"/>
+        <Payment/>
         
-        <Header style={{ color: "#B4BFCD", background: "#88768C", padding: "15px" }} title="Our Books"/>
+        <Header style={{ color: "white", background: "#88768C"}} title="Our Books"/>
         <BookList addToCart={this.addToCart} books={filteredBookList} style={style} />
 
       </div>

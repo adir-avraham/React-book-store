@@ -21,7 +21,7 @@ export default class Book extends React.Component<any, any> {
             <td><a href={link}>Wikipedia page</a></td>
             <td>{pages}</td>
             <td>{year}</td>
-            <td><Button size="small" variant="contained" color="primary" onClick={()=>{addToCart({image, country, language})}} >Add</Button></td>
+            <td><Button size="small" variant="contained" color="primary" onClick={()=>{addToCart({image, language, title})}} >Add</Button></td>
             </tr>
             </tbody>
             </table>

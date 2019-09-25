@@ -9,7 +9,7 @@ export default class Cart extends React.Component<any, any> {
     render() {
         
         const {books} = this.props;
-        
+        console.log(books)
         return (  
         <div>
             {books.map((book: any, index: number)=>
